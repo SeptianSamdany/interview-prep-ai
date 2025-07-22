@@ -6,7 +6,9 @@ const DashboardLayout = ({children}) => {
     return (
         <div>
             <Navbar /> 
-            
+
         </div>
     )
 }
+
+export default DashboardLayout; 
