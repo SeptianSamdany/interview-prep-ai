@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Toaster from "react-hot-toast";
 
@@ -21,7 +20,7 @@ const App = () => {
           <Route path="/sign-up" element={<SignUp />} />
 
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/interview-prep/:sesionId" element={<InterviewPrep />} />
+          <Route path="/interview-prep/:sessionId" element={<InterviewPrep />} />
           
         </Routes>
       </Router>

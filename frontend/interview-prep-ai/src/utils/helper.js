@@ -1,6 +1,6 @@
 export const validateEmail = (email) => {
-    const regex = /^[^\\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email)
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
 }; 
 
 export const getInitials = (title) => {
@@ -14,4 +14,4 @@ export const getInitials = (title) => {
     }
 
     return initials.toUpperCase(); 
-}
+};

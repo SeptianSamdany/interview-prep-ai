@@ -14,19 +14,19 @@ const SummaryCard = ({
 }) => {
     return (
         <div
-        className="bg-white border border-gray-300/40 rounded-xl p-2 overflow hidden cursor-pointer hover:shadow-xl shadow-gray-100 relative group"
-        onClick={onSelect}
+            className="bg-white border border-gray-300/40 rounded-xl p-2 overflow-hidden cursor-pointer hover:shadow-xl shadow-gray-100 relative group"
+            onClick={onSelect}
         >
             <div 
-            className="rounded-lg p-4 cursor-pointer relative"
-            style={{ 
-                background: colors.bgcolor, 
-            }}
+                className="rounded-lg p-4 cursor-pointer relative"
+                style={{ 
+                    background: colors?.bgcolor || '#f3f4f6',
+                }}
             >
                 <div className="flex items-start">
                     <div className="flex-shrink-0 w-12 h-12 bg-white rounded-md flex items-center justify-center mr-8">
                         <span className="text-lg font-semibold text-black">
-                            {getInitials(role)}
+                            {role ? getInitials(role) : 'NA'}
                         </span>
                     </div>
 
@@ -35,9 +35,11 @@ const SummaryCard = ({
                         <div className="flex justify-between items-start">
                             {/* Title and Skills */}
                             <div>
-                                <h2 className="text-[17px] font-medium">{role}</h2>
+                                <h2 className="text-[17px] font-medium text-black">
+                                    {role || 'No Role Specified'}
+                                </h2>
                                 <p className="text-xs font-medium text-gray-900">
-                                    {topicsToFocus}
+                                    {topicsToFocus || 'No topics specified'}
                                 </p>
                             </div>
                         </div>
@@ -45,10 +47,10 @@ const SummaryCard = ({
                 </div>
 
                 <button
-                    className="hidden group-hover:flex items-center gap-2 text-rose-500 font-medium bg-rose-50 px-3 py-1 rounded text-nowrap border border-rose-100 hover:border-rose-200 cursor-pointer absolute top-0 right-0"
+                    className="hidden group-hover:flex items-center gap-2 text-rose-500 font-medium bg-rose-50 px-3 py-1 rounded whitespace-nowrap border border-rose-100 hover:border-rose-200 cursor-pointer absolute top-2 right-2"
                     onClick={(e) => {
                         e.stopPropagation(); 
-                        onDelete(); 
+                        onDelete && onDelete(); 
                     }}
                 >
                     <LuTrash2 />
@@ -56,27 +58,27 @@ const SummaryCard = ({
             </div>
 
             <div className="px-3 pb-3">
-                <div className="flex items-center gap-3 mt-4">
-                    <div className="text-[10px] font-medium text-black px-3 py-1 border-[0.5px] border-gray-900 rounded-full "> 
-                        Experience: {experience} {experience == 1 ? "Year" : "Years"}
+                <div className="flex items-center gap-3 mt-4 flex-wrap">
+                    <div className="text-[10px] font-medium text-black px-3 py-1 border-[0.5px] border-gray-900 rounded-full"> 
+                        Experience: {experience || 0} {(experience === '1' || experience === 1) ? "Year" : "Years"}
                     </div>
 
                     <div className="text-[10px] font-medium text-black px-3 py-1 border-[0.5px] border-gray-900 rounded-full">
-                        {questions} Q & A
+                        {questions || 0} Q & A
                     </div>
 
                     <div className="text-[10px] font-medium text-black px-3 py-1 border-[0.5px] border-gray-900 rounded-full">
-                        Last Updated: {lastUpdated}
+                        Last Updated: {lastUpdated || 'Never'}
                     </div>
                 </div>
 
                 {/* Description */}
                 <p className="text-[12px] text-gray-500 font-medium line-clamp-2 mt-3">
-                    {description}
+                    {description || 'No description available'}
                 </p>
             </div>
         </div>
     )
 }
 
-export default SummaryCard; 
+export default SummaryCard;

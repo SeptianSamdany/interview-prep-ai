@@ -5,7 +5,7 @@ import SpinnerLoader from "../../components/Loader/SpinnerLoader";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 
-const CreateSessionForm = () => {
+const CreateSessionForm = ({ onSuccess, onClose }) => { // Added props
     const [formData, setFormData] = useState({
         role: "", 
         experience: "", 
@@ -23,6 +23,11 @@ const CreateSessionForm = () => {
             ...prevData, 
             [key]: value, 
         })); 
+        
+        // Clear error when user starts typing
+        if (error) {
+            setError(null);
+        }
     }; 
 
     const handleCreateSession = async (e) => {
@@ -30,8 +35,9 @@ const CreateSessionForm = () => {
 
         const { role, experience, topicsToFocus } = formData; 
 
-        if (!role || !experience || !topicsToFocus) {
-            setError("Please fill all the required fields.")
+        // Improved validation with trim
+        if (!role.trim() || !experience.trim() || !topicsToFocus.trim()) {
+            setError("Please fill all the required fields.");
             return; 
         }
 
@@ -39,34 +45,59 @@ const CreateSessionForm = () => {
         setIsLoading(true); 
 
         try {
+            // First API call - Generate questions
             const aiResponse = await axiosInstance.post(
                 API_PATHS.AI.GENERATE_QUESTIONS, 
                 {
-                    role, 
-                    experience, 
-                    topicsToFocus, 
+                    role: role.trim(), 
+                    experience: experience.trim(), 
+                    topicsToFocus: topicsToFocus.trim(), 
                     numberOfQuestions: 10, 
                 }
             ); 
 
             const generatedQuestions = aiResponse.data; 
 
+            // Second API call - Create session
             const response = await axiosInstance.post(API_PATHS.SESSION.CREATE, {
-                ...formData, 
+                ...formData,
+                role: formData.role.trim(),
+                experience: formData.experience.trim(), 
+                topicsToFocus: formData.topicsToFocus.trim(),
+                description: formData.description.trim(),
                 questions: generatedQuestions, 
-            })
+            });
 
             if (response.data?.session?._id) {
-                navigate(`/interview-prep/${response.data?.session?._id}`); 
+                // Call success callback if provided
+                if (onSuccess) {
+                    onSuccess(response.data.session);
+                }
+                
+                // Close modal if callback provided
+                if (onClose) {
+                    onClose();
+                }
+                
+                // Navigate to interview prep
+                navigate(`/interview-prep/${response.data.session._id}`); 
+            } else {
+                setError("Session created but no ID received. Please try again.");
             }
         } catch (error) {
-            if (error.response && error.response.data.message) {
+            console.error("Create session error:", error);
+            
+            if (error.response?.data?.message) {
                 setError(error.response.data.message); 
+            } else if (error.code === "ECONNABORTED") {
+                setError("Request timeout. Please check your connection and try again.");
+            } else if (error.code === "ERR_NETWORK") {
+                setError("Network error. Please check your internet connection.");
             } else {
                 setError("Something went wrong. Please try again."); 
             } 
         } finally {
-                setIsLoading(false)
+            setIsLoading(false);
         }
     }; 
 
@@ -86,6 +117,7 @@ const CreateSessionForm = () => {
                     label="Target Role"
                     placeholder="(e.g., Frontend Developer, UI/UX Designer, etc.)"
                     type="text"
+                    required
                 />
 
                 <Input 
@@ -93,38 +125,59 @@ const CreateSessionForm = () => {
                     onChange={({target}) => handleChange("experience", target.value)}
                     label="Years of Experience"
                     placeholder="(e.g., 1 year, 3 years, 5 years, etc.)"
-                    type="number"
+                    type="text" // Changed from number to text for flexibility
+                    required
                 />
 
                 <Input 
                     value={formData.topicsToFocus}
-                    onChange={({target}) => handleChange("topicToFocus", target.value)}
-                    label="Topics to Focus on "
+                    onChange={({target}) => handleChange("topicsToFocus", target.value)}
+                    label="Topics to Focus on"
                     placeholder="(Comma-separated, e.g., React, Node.js, MongoDB)"
                     type="text"
+                    required
                 />
 
                 <Input 
                     value={formData.description}
                     onChange={({target}) => handleChange("description", target.value)}
                     label="Description"
-                    placeholder="(Any spesific goals or notes for this session)"
+                    placeholder="(Any specific goals or notes for this session)" // Fixed typo
                     type="text"
                 />
                 
-                {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
+                {error && (
+                    <div className="text-red-500 text-xs pb-2.5 bg-red-50 p-3 rounded border border-red-200">
+                        {error}
+                    </div>
+                )}
 
-                <button
-                    type="submit"
-                    className="btn-primary w-full mt-2"
-                    disabled={isLoading}
-                >
-                    {isLoading && <SpinnerLoader />}
-                    Create Session
-                </button>
+                <div className="flex gap-3 mt-2">
+                    {onClose && (
+                        <button
+                            type="button"
+                            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+                            onClick={onClose}
+                            disabled={isLoading}
+                        >
+                            Cancel
+                        </button>
+                    )}
+                    
+                    <button
+                        type="submit"
+                        className={`btn-primary flex-1 flex items-center justify-center gap-2 ${
+                            onClose ? '' : 'w-full'
+                        }`}
+                        disabled={isLoading}
+                    >
+                        {isLoading && <SpinnerLoader />}
+                        {isLoading ? "Creating Session..." : "Create Session"}
+                    </button>
+                </div>
             </form>
         </div>
-    )
+    );
 }; 
 
-export default CreateSessionForm; 
+export default CreateSessionForm;

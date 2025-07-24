@@ -1,10 +1,11 @@
+// API Configuration
 export const BASE_URL = "http://localhost:8000"; 
 
 export const API_PATHS = {
     AUTH: {
         REGISTER: "/api/auth/register", 
         LOGIN: "/api/auth/login", 
-        GET_PROFILE: "api/auth/profile"
+        GET_PROFILE: "/api/auth/profile"
     }, 
 
     IMAGE: {
@@ -12,12 +13,12 @@ export const API_PATHS = {
     },
 
     AI: {
-        GENERATE_QUESTIONS: "api/ai/generate-questions", 
+        GENERATE_QUESTIONS: "/api/ai/generate-questions", 
         GENERATE_EXPLANATION: "/api/ai/generate-explanation"
     }, 
 
     SESSION: {
-        CREATE: "/api/sessions/create", 
+        CREATE: "/api/sessions/create",
         GET_ALL: "/api/sessions/my-sessions", 
         GET_ONE: (id) => `/api/sessions/${id}`, 
         DELETE: (id) => `/api/sessions/${id}`, 
@@ -28,4 +29,4 @@ export const API_PATHS = {
         PIN: (id) => `/api/questions/${id}/pin`, 
         UPDATE_NOTE: (id) => `/api/questions/${id}/note`
     }
-}
+};

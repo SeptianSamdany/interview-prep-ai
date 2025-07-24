@@ -1,21 +1,16 @@
-import { useRef } from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { LuUser, LuUpload, LuTrash } from "react-icons/lu"; 
-
 
 const ProfilePhotoSelector = ({ image, setImage }) => {
     const inputRef = useRef(null); 
     const [previewUrl, setPreviewUrl] = useState(null); 
 
-    const hadleImageChange = (event) => {
+    const handleImageChange = (event) => {
         const file = event.target.files[0]; 
         if (file) {
             setImage(file); 
 
             const preview = URL.createObjectURL(file); 
-            if(setPreview) {
-                setPreview(preview); 
-            }
             setPreviewUrl(preview); 
         }
     }; 
@@ -23,10 +18,6 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
     const handleRemoveImage = () => {
         setImage(null); 
         setPreviewUrl(null); 
-
-        if(setPreview) {
-            setPreview(null); 
-        }
     }; 
 
     const onChooseFile = () => {
@@ -48,9 +39,9 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
                     <LuUser className="text-4xl text-orange-500" /> 
 
                     <button
-                    type="button"
-                    className="w-8 h-8 flex items-center justify-center bg-linear-to-r from-orange-500/85 to-orange-600 text-white rounded-full absolute -bottom-1 -top-1 cursor-pointer"
-                    onClick={onChooseFile}
+                        type="button"
+                        className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-orange-500/85 to-orange-600 text-white rounded-full absolute -bottom-1 -right-1 cursor-pointer"
+                        onClick={onChooseFile}
                     >
                         <LuUpload />
                     </button>
@@ -58,7 +49,7 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
             ) : (
                 <div className="relative">
                     <img 
-                        src={preview || previewUrl}
+                        src={previewUrl}
                         alt="Profile Photo"
                         className="w-20 h-20 rounded-full object-cover"
                     />
@@ -71,10 +62,9 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
                         <LuTrash />
                     </button>
                 </div>
-            )
-            }
+            )}
         </div>
     )
 }
 
-export default ProfilePhotoSelector; 
+export default ProfilePhotoSelector;

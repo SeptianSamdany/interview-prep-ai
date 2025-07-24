@@ -4,8 +4,9 @@ import { validateEmail } from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { UserContext } from "../../context/userContext";
+import Input from "../../components/Inputs/Input";
 
-const Login = (setCurrentPage) => {
+const Login = ({ setCurrentPage }) => {
     const [email, setEmail] = useState(""); 
     const [password, setPassword] = useState(""); 
     const [error, setError] = useState(null); 
@@ -40,41 +41,40 @@ const Login = (setCurrentPage) => {
 
             if (token) {
                 localStorage.setItem("token", token); 
-                updateUser(response.data)
+                updateUser(response.data);
                 navigate("/dashboard"); 
             }
         } catch (error) {
             if (error.response && error.response.data.message) {
                 setError(error.response.data.message); 
             } else {
-                setError("Something went wrong. Please try again later :)")
+                setError("Something went wrong. Please try again later :)");
             }
         } 
     }; 
 
     return (
         <div className="w-[90vw] md:w-[33vw] p-7 flex flex-col justify-center">
-            <h3 className="text-lg font-semibold text-black">Welcome Back Little Baby
-            </h3>
+            <h3 className="text-lg font-semibold text-black">Welcome Back Little Baby</h3>
             <p className="text-xs text-slate-700 mt-[5px] mb-6">
-                Please Enter yout details to Login
+                Please Enter your details to Login
             </p>
 
             <form onSubmit={handleLogin}>
                 <Input
-                value={email}
-                onChange={( { target } ) => setEmail(target.vallue)}
-                label="Email Address"
-                placeholder="user@gmail.com"
-                text="text"
+                    value={email}
+                    onChange={({ target }) => setEmail(target.value)}
+                    label="Email Address"
+                    placeholder="user@gmail.com"
+                    type="text"
                 />
 
                 <Input
-                value={password}
-                onChange={( { target } ) => setPassword(target.vallue)}
-                label="Password"
-                placeholder="Min. 8 Characters"
-                text="password"
+                    value={password}
+                    onChange={({ target }) => setPassword(target.value)}
+                    label="Password"
+                    placeholder="Min. 8 Characters"
+                    type="password"
                 />
 
                 {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
@@ -84,12 +84,12 @@ const Login = (setCurrentPage) => {
                 </button>
 
                 <p className="text-[13px] text-slate-800 mt-3">
-                    Don't have an account?("")
+                    Don't have an account?{" "}
                     <button
-                    className="font-medium text-primary underline cursor-pointer"
-                    onClick={() => {
-                        setCurrentPage("signup"); 
-                    }}
+                        className="font-medium text-primary underline cursor-pointer"
+                        onClick={() => {
+                            setCurrentPage("signup"); 
+                        }}
                     >
                         Sign Up
                     </button>

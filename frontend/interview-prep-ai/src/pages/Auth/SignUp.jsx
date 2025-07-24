@@ -10,12 +10,12 @@ import { API_PATHS } from "../../utils/apiPaths";
 import uploadImage from "../../utils/uploadImage";
 
 const SignUp = ({setCurrentPage}) => {
-    const [profilePic, seProfilePic] = useState(null); 
+    const [profilePic, setProfilePic] = useState(null); 
     const [fullName, setFullName] = useState(""); 
     const [email, setEmail] = useState(""); 
     const [password, setPassword] = useState(""); 
 
-    const [error, seError] = useState(""); 
+    const [error, setError] = useState(""); 
 
     const { updateUser } = useContext(UserContext); 
     const navigate = useNavigate(); 
@@ -26,7 +26,7 @@ const SignUp = ({setCurrentPage}) => {
         let profileImageUrl = ""; 
 
         if (!fullName) { 
-            setError("Please enter full name")
+            setError("Please enter full name");
             return; 
         }
 
@@ -36,11 +36,11 @@ const SignUp = ({setCurrentPage}) => {
         }
 
         if (!password) {
-                setError("Please enter the password"); 
-                return 
+            setError("Please enter the password"); 
+            return;
         }
 
-        setError("")
+        setError("");
 
          // Sign Up API Call 
          try {
@@ -67,7 +67,7 @@ const SignUp = ({setCurrentPage}) => {
             if (error.response && error.response.data.message) {
                 setError(error.response.data.message); 
             } else {
-                setError("Something went wrong. Please try again later baby ")
+                setError("Something went wrong. Please try again later baby ");
             }
          }
     }; 
@@ -85,27 +85,39 @@ const SignUp = ({setCurrentPage}) => {
                         value={fullName}
                         onChange={({target}) => setFullName(target.value)}
                         label="Full Name"
-                        placeholder="Jhon Wick"
+                        placeholder="John Wick"
                         type="text"
                     />
                     <Input
                         value={email}
-                        onChange={({target}) => setFullName(target.value)}
+                        onChange={({target}) => setEmail(target.value)}
                         label="Email"
-                        placeholder="jhonwick@gmail.com"
+                        placeholder="johnwick@gmail.com"
                         type="email"
+                    />
+                    <Input
+                        value={password}
+                        onChange={({target}) => setPassword(target.value)}
+                        label="Password"
+                        placeholder="Min. 8 Characters"
+                        type="password"
                     />
                 </div>
 
-                {error && <p className="text-red-500 text-xs pb-2.5"></p>}
+                {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
+
+                <button type="submit" className="btn-primary">
+                    Sign Up
+                </button>
 
                 <p className="text-[13px] text-slate-800 mt-3">
-                    Already Have an Account?("")
+                    Already Have an Account?{" "}
                     <button
-                    className="font-medium text-primary underline cursor-pointer"
-                    onClick={() => {
-                        setCurrentPage("login"); 
-                    }}
+                        type="button"
+                        className="font-medium text-primary underline cursor-pointer"
+                        onClick={() => {
+                            setCurrentPage("login"); 
+                        }}
                     >
                       Login        
                     </button>

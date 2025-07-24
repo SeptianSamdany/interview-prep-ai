@@ -6,11 +6,15 @@ export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
 
-    const [ user, setUser ] = useState(null); 
-    const [loading, setLoading ] = useState(true); 
+    const [user, setUser] = useState(null); 
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
-        if (user) return; 
+        // Early return if user already exists
+        if (user) {
+            setLoading(false);
+            return; 
+        }
 
         const accessToken = localStorage.getItem("token"); 
         if (!accessToken) {
@@ -20,7 +24,7 @@ const UserProvider = ({ children }) => {
 
         const fetchUser = async () => {
             try { 
-                const response = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE.GET_PROFILE); 
+                const response = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE); 
                 setUser(response.data); 
             } catch (error) {
                 console.error("User not authenticated", error); 
@@ -31,17 +35,20 @@ const UserProvider = ({ children }) => {
         }; 
 
         fetchUser(); 
-    }, []); 
+    }, [user]); // Added dependency for better effect management
 
     const updateUser = (userData) => {
         setUser(userData); 
-        localStorage.setItem("token", userData.token); 
+        if (userData.token) {
+            localStorage.setItem("token", userData.token); 
+        }
         setLoading(false); 
     }; 
 
     const clearUser = () => {
         setUser(null); 
         localStorage.removeItem("token"); 
+        setLoading(false); // Ensure loading is false after clearing
     }; 
 
     return (
@@ -49,6 +56,6 @@ const UserProvider = ({ children }) => {
             {children}
         </UserContext.Provider>
     )
-}
+};
 
-export default UserProvider; 
+export default UserProvider;

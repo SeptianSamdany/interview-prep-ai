@@ -1,7 +1,7 @@
 const Question = require('../models/Question'); 
 const Session = require("../models/Session"); 
 
-exports.addQuestionsToSession = async (req, res) => {
+exports.addQuestionToSession = async (req, res) => {
     try { 
         const { sessionId, questions } = req.body; 
 

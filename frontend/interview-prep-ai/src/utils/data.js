@@ -9,8 +9,7 @@ export const CARD_BG = [
     { id: 8, bgcolor: 'linear-gradient(135deg, #e8fef3 0%, #f5fef8 100%'}, 
     { id: 9, bgcolor: 'linear-gradient(135deg, #f0ecff 0%, #f7f5ff 100%'}, 
     { id: 10, bgcolor: 'linear-gradient(135deg, #fef2f2 0%, #fff8f8 100%'}, 
-
-]
+]; 
 
 export const APP_FEATURES = [
     {

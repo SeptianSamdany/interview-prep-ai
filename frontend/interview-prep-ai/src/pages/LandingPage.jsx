@@ -6,7 +6,7 @@ import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext";
-import ProfileInfoCard from "../components/Cards/ProfileInfoCard"
+import ProfileInfoCard from "../components/Cards/ProfileInfoCard";
 
 const APP_FEATURES = [
   {
@@ -29,6 +29,7 @@ const LandingPage = () => {
   const [currentPage, setCurrentPage] = useState("login");
 
   const navigate = useNavigate(); 
+  
   const handleCTA = () => {
     if (!user) {
       setOpenAuthModal(true); 
@@ -55,14 +56,16 @@ const LandingPage = () => {
                 Interview Prep AI
               </div>
             </div>
-            { user ? (
+            {user ? (
               <ProfileInfoCard />
-            ) : ( <button
-              className="bg-black text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-gray-800 transition-colors"
-              onClick={() => setOpenAuthModal(true)}
-            >
-              Login / Sign Up
-            </button> )}
+            ) : (
+              <button
+                className="bg-black text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-gray-800 transition-colors"
+                onClick={() => setOpenAuthModal(true)}
+              >
+                Login / Sign Up
+              </button>
+            )}
           </header>
 
           {/* Hero Content */}
@@ -98,7 +101,7 @@ const LandingPage = () => {
 
             {/* Hero Image - Centered */}
             <div className="mt-16 mb-16">
-              <div className="w-full max-w-2xl mx-auto">
+              <div className="w-full max-w-5xl mx-auto">
                 <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200">
                   <img
                     src={HERO_IMAGE}
@@ -177,20 +180,20 @@ const LandingPage = () => {
       <Modal
         isOpen={openAuthModal}
         onClose={() => {
-            setOpenAuthModal(false)
-            setCurrentPage("login")
+          setOpenAuthModal(false);
+          setCurrentPage("login");
         }}
         hideHeader
-    >
+      >
         <div>
-            {currentPage === "login" && (
-                <Login setCurrentPage={setCurrentPage} />
-            )}
-            {currentPage === "signup" && (
-                <SignUp setCurrentPage={setCurrentPage} />
-            )}
+          {currentPage === "login" && (
+            <Login setCurrentPage={setCurrentPage} />
+          )}
+          {currentPage === "signup" && (
+            <SignUp setCurrentPage={setCurrentPage} />
+          )}
         </div>
-    </Modal>
+      </Modal>
     </>
   );
 };
