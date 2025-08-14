@@ -5,8 +5,9 @@ const path = require("path");
 const connectDB = require("./config/db");
 
 const authRoutes = require('../backend/routes/authRoutes'); 
-const sessionRoutes = require('../backend/routes/sessionRoutes'); 
+const sessionRoutes = require('../backend/routes/sessionRoutes');
 const questionRoutes = require('../backend/routes/questionRoutes'); 
+
 const { protect } = require('./middlewares/authMiddleware');
 const { generateInterviewQuestions, generateConceptExplanation } = require("./controllers/aiController");
 
